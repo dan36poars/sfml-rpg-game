@@ -6,17 +6,13 @@ Game::Game()
     this->initPrivateFunctions();
 }
 
-Game::Game(std::string title = "title game") : title(title)
-{
-    this->initPrivateFunctions();
-}
-
 // Destructor
 Game::~Game()
 {
     delete this->window;
     delete this->player;
 }
+
 
 // Private Functions
 void Game::initPrivateFunctions()
@@ -28,9 +24,26 @@ void Game::initPrivateFunctions()
 void Game::initWindow()
 {
     // create a sfml window from a window.ini file
-    this->window = new sf::RenderWindow(sf::VideoMode(WIDTH_, HEIGHT_), title, sf::Style::Close | sf::Style::Titlebar);
-    this->window->setFramerateLimit(FRAME_RATE_LIMIT);
-    this->window->setVerticalSyncEnabled(false);
+    std::ifstream ifs("config/window.ini");
+
+    std::string title = "nome";
+    sf::VideoMode window_bounds(800, 600);
+    unsigned framerate_limite = 60;
+    bool verticalsync_enable = false;
+
+    if (ifs.is_open())
+    {
+        std::getline(ifs, title);
+        ifs >> window_bounds.width >> window_bounds.height;
+        ifs >> framerate_limite;
+        ifs >> verticalsync_enable;        
+    }
+    
+    ifs.close();
+
+    this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Close | sf::Style::Titlebar);
+    this->window->setFramerateLimit(framerate_limite);
+    this->window->setVerticalSyncEnabled(verticalsync_enable);
 }
 
 void Game::initPlayer()
@@ -43,6 +56,12 @@ void Game::initPlayer()
 // Acessors
 
 // Function
+void Game::updadeDt() 
+{
+    // as many more process in the game increases the Dt time
+    this->dt = this->dtClock.restart().asSeconds();
+}
+
 void Game::renderPlayer()
 {
     this->player->render(*this->window);
@@ -52,6 +71,7 @@ void Game::run()
 {
     while (this->window->isOpen())
     {
+        this->updadeDt();
         this->update();
         this->render();
     }
@@ -72,7 +92,7 @@ void Game::updateSFMLEvents()
 
 void Game::update()
 {
-    this->updateSFMLEvents();
+    this->updateSFMLEvents();         
 }
 
 void Game::render()

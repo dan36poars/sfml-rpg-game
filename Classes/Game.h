@@ -1,22 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-// standard library
-#include <iostream>
-#include <vector>
-#include <ctime>
-#include <sstream>
-#include <string>
-#include <map>
-#include <vector>
-
-// sfml libraries
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
+#include "State.h"
 #include "Player.h"
 
 /*
@@ -24,16 +9,14 @@
     Wrapper class
 */
 
-#define WIDTH_ 800
-#define HEIGHT_ 600
-#define FRAME_RATE_LIMIT 60
-
 class Game
 {
 private:
     /* data */
     sf::RenderWindow *window;
-    std::string title;
+
+    sf::Clock dtClock;
+    float dt;
 
     // Private functions
     void initPrivateFunctions();
@@ -48,7 +31,6 @@ private:
 public:
     // Contructor
     Game();
-    Game(std::string title);
     // Destructor
     ~Game();
 
@@ -57,6 +39,8 @@ public:
     // Acessors
 
     // Function
+    void updadeDt();
+
     void renderPlayer();
     
     void run();
