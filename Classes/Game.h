@@ -60,7 +60,7 @@ public:
     void renderPlayer();
     
     void run();
-    void updatePoolEvents();
+    void updateSFMLEvents();
     void update();
     void render();
 };

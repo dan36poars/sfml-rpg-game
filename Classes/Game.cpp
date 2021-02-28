@@ -27,6 +27,7 @@ void Game::initPrivateFunctions()
 
 void Game::initWindow()
 {
+    // create a sfml window from a window.ini file
     this->window = new sf::RenderWindow(sf::VideoMode(WIDTH_, HEIGHT_), title, sf::Style::Close | sf::Style::Titlebar);
     this->window->setFramerateLimit(FRAME_RATE_LIMIT);
     this->window->setVerticalSyncEnabled(false);
@@ -56,7 +57,7 @@ void Game::run()
     }
 }
 
-void Game::updatePoolEvents()
+void Game::updateSFMLEvents()
 {
     sf::Event e;
     while (this->window->pollEvent(e))
@@ -71,7 +72,7 @@ void Game::updatePoolEvents()
 
 void Game::update()
 {
-    this->updatePoolEvents();
+    this->updateSFMLEvents();
 }
 
 void Game::render()
