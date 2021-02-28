@@ -11,13 +11,21 @@ Game::~Game()
 {
     delete this->window;
     delete this->player;
-}
 
+    // delete the states from stack
+    while (!this->states.empty())
+    {
+        delete this->states.top();
+        this->states.pop();
+    }
+    
+}
 
 // Private Functions
 void Game::initPrivateFunctions()
 {
     this->initWindow();
+    this->initStates();
     this->initPlayer();
 }
 
@@ -36,9 +44,9 @@ void Game::initWindow()
         std::getline(ifs, title);
         ifs >> window_bounds.width >> window_bounds.height;
         ifs >> framerate_limite;
-        ifs >> verticalsync_enable;        
+        ifs >> verticalsync_enable;
     }
-    
+
     ifs.close();
 
     this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Close | sf::Style::Titlebar);
@@ -46,9 +54,15 @@ void Game::initWindow()
     this->window->setVerticalSyncEnabled(verticalsync_enable);
 }
 
+// initVariables
 void Game::initPlayer()
 {
     this->player = new Player();
+}
+
+void Game::initStates()
+{
+    this->states.push(new GameState(this->window));
 }
 
 // Modifiers
@@ -56,7 +70,7 @@ void Game::initPlayer()
 // Acessors
 
 // Function
-void Game::updadeDt() 
+void Game::updadeDt()
 {
     // as many more process in the game increases the Dt time
     this->dt = this->dtClock.restart().asSeconds();
@@ -92,7 +106,11 @@ void Game::updateSFMLEvents()
 
 void Game::update()
 {
-    this->updateSFMLEvents();         
+    this->updateSFMLEvents();
+    if (!this->states.empty())
+    {
+        this->states.top()->update(this->dt);
+    }
 }
 
 void Game::render()
@@ -100,6 +118,10 @@ void Game::render()
     this->window->clear();
 
     // Drawing some stuffs!
+    if (!this->states.empty())
+    {
+        this->states.top()->render();
+    }
 
     this->window->display();
 }

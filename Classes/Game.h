@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "State.h"
+#include "States/GameState.h"
 #include "Player.h"
 
 /*
@@ -18,12 +18,15 @@ private:
     sf::Clock dtClock;
     float dt;
 
+    std::stack<State *> states;
+
     // Private functions
     void initPrivateFunctions();
     void initWindow();
 
     // initVariables
     void initPlayer();
+    void initStates();
 
     // Player
     Player *player;
@@ -42,7 +45,7 @@ public:
     void updadeDt();
 
     void renderPlayer();
-    
+
     void run();
     void updateSFMLEvents();
     void update();

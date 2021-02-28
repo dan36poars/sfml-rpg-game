@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <stack>
 
 // sfml libraries
 #include <SFML/Graphics.hpp>
@@ -22,15 +23,18 @@ class State
 {
 private:
     /* data */
+    sf::RenderWindow *window;
     std::vector<sf::Texture> textures;
 
 public:
-    State(/* args */);
+    State(sf::RenderWindow *window);
     virtual ~State();
 
+    virtual void endState() = 0;
+
     // functions
-    virtual void update() = 0;
-    virtual void render() = 0;
+    virtual void update(const float &dt) = 0;
+    virtual void render(sf::RenderTarget *target = nullptr) = 0;
 };
 
 #endif // __STATE_H__
